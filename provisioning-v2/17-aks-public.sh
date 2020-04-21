@@ -47,14 +47,14 @@ az aks create \
     --enable-addons monitoring \
     --load-balancer-outbound-ips $AKS_PIP_ID \
     --vnet-subnet-id $AKS_SUBNET_ID \
-    --network-plugin azure \
-    --network-policy azure \
+    --network-plugin kubenet \
+    --network-policy calico \
     --service-cidr $AKS_SERVICE_CIDR \
     --dns-service-ip $AKS_DNS_SERVICE_IP \
     --docker-bridge-address $AKS_DOCKER_BRIDGE_ADDRESS \
     --nodepool-name $AKS_DEFAULT_NODEPOOL \
-    --node-count 3 \
-    --max-pods 30 \
+    --node-count 5 \
+    --max-pods 100 \
     --node-vm-size "Standard_D4s_v3" \
     --vm-set-type VirtualMachineScaleSets \
     --service-principal $AKS_SP_ID \

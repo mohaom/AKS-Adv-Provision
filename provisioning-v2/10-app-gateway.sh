@@ -12,7 +12,7 @@ source ./$VAR_FILE
 # Using standard sku allow extra security as it is closed by default and allow traffic through NSGs
 # More info here: https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-ip-addresses-overview-arm
 az network public-ip create \
-    -g $RG_INFOSEC \
+    -g $RG_SHARED \
     -n $AGW_PIP_NAME \
     -l $LOCATION \
     --sku Standard \
@@ -26,7 +26,7 @@ az network public-ip create \
 
 AGW_RESOURCE_ID=$(az network application-gateway create \
   --name $AGW_NAME \
-  --resource-group $RG_INFOSEC \
+  --resource-group $RG_SHARED \
   --location $LOCATION \
   --min-capacity 2 \
   --frontend-port 80 \
@@ -38,7 +38,7 @@ AGW_RESOURCE_ID=$(az network application-gateway create \
   --private-ip-address $AGW_PRIVATE_IP \
   --public-ip-address $AGW_PIP_NAME \
   --subnet $AGW_SUBNET_NAME \
-  --vnet-name $HUB_EXT_VNET_NAME \
+  --vnet-name $PROJ_VNET_NAME \
   --tags $TAG_ENV_DEV $TAG_PROJ_SHARED $TAG_DEPT_IT $TAG_STATUS_EXP \
   --query id -o tsv)
 

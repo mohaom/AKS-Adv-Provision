@@ -39,9 +39,9 @@ PREFIX="${ENVIRONMENT}${PROJECT_CODE}"
 echo export PREFIX=$PREFIX >> ./$VAR_FILE
 
 # Primary location
-LOCATION="westeurope"
+LOCATION="East US"
 # Location code will be used to setup multi-region resources
-LOCATION_CODE="weu"
+LOCATION_CODE="US"
 echo export LOCATION=$LOCATION >> ./$VAR_FILE
 echo export LOCATION_CODE=$LOCATION_CODE >> ./$VAR_FILE
 
@@ -59,15 +59,15 @@ echo export RG_SHARED="${PREFIX}-shared-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >
 echo export RG_DEVOPS="${PREFIX}-devops-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
 
 ### Azure Monitor
-echo export SHARED_WORKSPACE_NAME="${PREFIX}-${SUBSCRIPTION_CODE}-shared-logs" >> ./$VAR_FILE
-echo export HUB_EXT_WORKSPACE_NAME="${PREFIX}-${SUBSCRIPTION_CODE}-hub-logs" >> ./$VAR_FILE
+echo export SHARED_WORKSPACE_NAME="${PREFIX}-${SUBSCRIPTION_CODE}-logs" >> ./$VAR_FILE
+#echo export HUB_EXT_WORKSPACE_NAME="${PREFIX}-${SUBSCRIPTION_CODE}-hub-logs" >> ./$VAR_FILE
 
 # Creating Application Insights for each app
-echo export APP_NAME="${PREFIX}-REPLACE-insights-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
+echo export APP_NAME="${PREFIX}-insights-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
 
 ### Virtual networks
-echo export PROJ_VNET_NAME="spoke-${PREFIX}-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
-echo export HUB_EXT_VNET_NAME="hub-ext-vnet-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
+echo export PROJ_VNET_NAME="${PREFIX}-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
+# echo export HUB_EXT_VNET_NAME="hub-ext-vnet-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
 # HUB_INT_VNET_NAME can be added to introduce on-premise connectivity
 
 
@@ -81,7 +81,7 @@ echo export SVC_SUBNET_NAME="${PREFIX}-ingress" >> ./$VAR_FILE
 echo export VN_SUBNET_NAME="${PREFIX}-vn" >> ./$VAR_FILE
 
 # Development API Management subnet
-echo export APIM_HOSTED_SUBNET_NAME="${PREFIX}-apim-dev" >> ./$VAR_FILE
+# echo export APIM_HOSTED_SUBNET_NAME="${PREFIX}-apim-dev" >> ./$VAR_FILE
 
 # Project devops/jump-box subnet
 echo export PROJ_DEVOPS_AGENTS_SUBNET_NAME="${PREFIX}-devops" >> ./$VAR_FILE
@@ -109,36 +109,36 @@ echo export FW_SUBNET_NAME="AzureFirewallSubnet" >> ./$VAR_FILE
 # Sizing docs: https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni
 
 # 2046 allocated addresses (from 8.0 to 15.255)
-echo export PROJ_VNET_ADDRESS_SPACE_1="10.165.8.0/21" >> ./$VAR_FILE
+echo export PROJ_VNET_ADDRESS_SPACE_1="10.19.0.0/16" >> ./$VAR_FILE
 # 2046 allocated addresses (from 16.0 to 23.255)
-echo export PROJ_VNET_ADDRESS_SPACE_2="10.165.16.0/21" >> ./$VAR_FILE
+#echo export PROJ_VNET_ADDRESS_SPACE_2="10.165.16.0/21" >> ./$VAR_FILE
 # Incase you need the next address space, you can use this
 # echo export PROJ_VNET_ADDRESS_SPACE_3="10.165.24.0/22" >> ./$VAR_FILE
 
 # This /21 size would support around 60 node cluster (given that 30 pods/cluster is used)
-echo export AKS_SUBNET_IP_PREFIX="10.165.8.0/21" >> ./$VAR_FILE
-echo export VN_SUBNET_IP_PREFIX="10.165.16.0/22" >> ./$VAR_FILE
-echo export SVC_SUBNET_IP_PREFIX="10.165.20.0/24" >> ./$VAR_FILE
-echo export APIM_HOSTED_SUBNET_IP_PREFIX="10.165.21.0/24" >> ./$VAR_FILE
-echo export PROJ_DEVOPS_AGENTS_SUBNET_IP_PREFIX="10.165.22.0/24" >> ./$VAR_FILE
-echo export PRIVATE_ENDPOINTS_SUBNET_NAME="10.165.23.0/24" >> ./$VAR_FILE
+echo export AKS_SUBNET_IP_PREFIX="10.19.0.0/27" >> ./$VAR_FILE
+echo export VN_SUBNET_IP_PREFIX="10.19.1.0/24" >> ./$VAR_FILE
+#echo export SVC_SUBNET_IP_PREFIX="10.19.2.0/24" >> ./$VAR_FILE
+#echo export APIM_HOSTED_SUBNET_IP_PREFIX="10.165.21.0/24" >> ./$VAR_FILE
+echo export PROJ_DEVOPS_AGENTS_SUBNET_IP_PREFIX="10.19.0.32/27" >> ./$VAR_FILE
+echo export PRIVATE_ENDPOINTS_SUBNET_NAME="10.19.3.0/24" >> ./$VAR_FILE
 
 # 2048 allocated addresses (from 0.0 to 7.255)
-echo export HUB_EXT_VNET_ADDRESS_SPACE="10.165.0.0/21" >> ./$VAR_FILE
+#echo export HUB_EXT_VNET_ADDRESS_SPACE="10.165.0.0/21" >> ./$VAR_FILE
 
-echo export FW_SUBNET_IP_PREFIX="10.165.1.0/24" >> ./$VAR_FILE
-echo export AGW_SUBNET_IP_PREFIX="10.165.2.0/24" >> ./$VAR_FILE
-echo export APIM_SUBNET_IP_PREFIX="10.165.3.0/24" >> ./$VAR_FILE
-echo export DEVOPS_AGENTS_SUBNET_IP_PREFIX="10.165.4.0/24" >> ./$VAR_FILE
+echo export FW_SUBNET_IP_PREFIX="10.19.10.0/26" >> ./$VAR_FILE
+echo export AGW_SUBNET_IP_PREFIX="10.19.10.64/26" >> ./$VAR_FILE
+echo export APIM_SUBNET_IP_PREFIX="10.19.0.64/27" >> ./$VAR_FILE
+echo export DEVOPS_AGENTS_SUBNET_IP_PREFIX="10.19.0.96/27" >> ./$VAR_FILE
 
 ### Key Vault
 echo export KEY_VAULT_PRIMARY="${PREFIX}-shared-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
 
 ### API Management (Dev instance)
-echo export APIM_NAME=$PREFIX-dev-apim-$SUBSCRIPTION_CODE-$LOCATION_CODE  >> ./$VAR_FILE
-echo export APIM_ORGANIZATION_NAME="Mohamed-Saif" >> ./$VAR_FILE
-echo export APIM_ADMIN_EMAIL="mohamed.saif@outlook.com" >> ./$VAR_FILE
-echo export APIM_SKU="Developer" >> ./$VAR_FILE #Replace with "Premium" if you are deploying to production
+echo export APIM_NAME=$PREFIX-apim-$SUBSCRIPTION_CODE-$LOCATION_CODE  >> ./$VAR_FILE
+echo export APIM_ORGANIZATION_NAME="Tat" >> ./$VAR_FILE
+echo export APIM_ADMIN_EMAIL="momarse@hotmail.com" >> ./$VAR_FILE
+echo export APIM_SKU="Premium" >> ./$VAR_FILE #Replace with "Premium" if you are deploying to production
 
 ### AAD Integration
 
@@ -186,7 +186,7 @@ echo export CONTAINER_REGISTRY_NAME="acr${PREFIX}${SUBSCRIPTION_CODE}${LOCATION_
 
 ### Application Gateway (AGW)
 echo export AGW_NAME="${PREFIX}-agw-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
-echo export AGW_PRIVATE_IP="10.165.2.10" >> ./$VAR_FILE
+echo export AGW_PRIVATE_IP="10.19.10.69" >> ./$VAR_FILE
 # echo export AGW_RESOURCE_ID=REPLACE >> ./$VAR_FILE
 
 ### Azure Firewall
@@ -215,19 +215,13 @@ echo export AKS_DEFAULT_NODEPOOL=$AKS_DEFAULT_NODEPOOL >> ./$VAR_FILE
 # AKS Networking
 # Make sure that all of these ranges are not overlapping to any connected network space (on Azure and otherwise)
 # These addresses are lated to AKS services mainly and should not overlap with other networks as they might present a conflict
-echo export AKS_SERVICE_CIDR="10.41.0.0/16" >> ./$VAR_FILE
-echo export AKS_DNS_SERVICE_IP="10.41.0.10" >> ./$VAR_FILE
+echo export AKS_SERVICE_CIDR="10.19.2.0/24" >> ./$VAR_FILE
+echo export AKS_DNS_SERVICE_IP="10.19.4.4" >> ./$VAR_FILE
 echo export AKS_DOCKER_BRIDGE_ADDRESS="172.17.0.1/16" >> ./$VAR_FILE
 # Range to be used when using kubenet (not Azure CNI)
 echo export AKS_POD_CIDR="10.244.0.0/16" >> ./$VAR_FILE
 
-# If you are using Windows Containers support, you need the following
-WIN_USER="localwinadmin"
-WIN_PASSWORD="P@ssw0rd1234"
-WIN_NODEPOOL="${PREFIX}-win-np"
-echo export WIN_USER=$WIN_USER >> ./$VAR_FILE
-echo export WIN_PASSWORD=$WIN_PASSWORD >> ./$VAR_FILE
-echo export WIN_NODEPOOL=$WIN_NOODEPOOL >> ./$VAR_FILE
+
 
 ### Public IPs
 echo export AKS_PIP_NAME="${AKS_CLUSTER_NAME}-pip" >> ./$VAR_FILE
