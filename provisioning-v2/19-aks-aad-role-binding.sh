@@ -74,8 +74,8 @@ AKS_ID=$(az aks show \
 
 # Create the "appdev" group. Sometime you need to wait for a few seconds for the new group to be fully available for the next steps
 APPDEV_ID=$(az ad group create \
-    --display-name appdev \
-    --mail-nickname appdev \
+    --display-name developers \
+    --mail-nickname developers \
     --query objectId -o tsv)
 
 # Create Azure role assignment for appdev group, this will allow members to access AKS via kubectl
@@ -99,12 +99,12 @@ az role assignment create \
 # Creating our developer user account
 AKSDEV1_ID=$(az ad user create \
   --display-name "AKS Dev 1" \
-  --user-principal-name Os1@almstories.com \
+  --user-principal-name osos@almstories.com \
   --password P@ssw0rd1 \
   --query objectId -o tsv)
 
 # Adding the new user to the appdev group
-az ad group member add --group appdev --member-id $AKSDEV1_ID
+az ad group member add --group developers --member-id $AKSDEV1_ID
 
 # Create a user for the SRE role
 AKSSRE1_ID=$(az ad user create \
@@ -129,9 +129,9 @@ kubectl create namespace dev
 kubectl apply -f ./deployments/role-dev-namespace.yaml
 
 # We need the group resource ID for appdev group to be replaced in the role binding deployment file
-az ad group show --group appdev --query objectId -o tsv
+az ad group show --group developers --query objectId -o tsv
 
-# Replace the group id in rolebinding-dev-namespace.yaml before applying the deployment
+# Replace the group id in rolebinding-dev-namespace.yaml before applying the deployment # Note the error!
 sed -i rolebinding-dev-namespace.yaml -e "s/groupObjectId/$APPDEV_ID/g"
 kubectl apply -f ./deployments/rolebinding-dev-namespace.yaml
 
@@ -152,7 +152,7 @@ kubectl apply -f ./deployments/rolebinding-sre-namespace.yaml
 az aks get-credentials --resource-group $RG_AKS  --name $AKS_CLUSTER_NAME --overwrite-existing
 
 # Now lets try to get nodes. You should have the AAD sign in experience. After signing in with Dev user, you should see it is forbidden :)
-kubectl get nodes
+kubectl get po --namespace dev
 
 # Lets try run a basic NGINX pod on the dev namespace (in case you signed in with a dev user)
 kubectl run --generator=run-pod/v1 nginx-dev --image=nginx --namespace dev
