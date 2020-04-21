@@ -99,7 +99,7 @@ az role assignment create \
 # Creating our developer user account
 AKSDEV1_ID=$(az ad user create \
   --display-name "AKS Dev 1" \
-  --user-principal-name aksdev1@mobivisions.com \
+  --user-principal-name Os1@almstories.com \
   --password P@ssw0rd1 \
   --query objectId -o tsv)
 

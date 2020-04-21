@@ -22,9 +22,9 @@ echo export AKS_VERSION=$AKS_VERSION >> ./$VAR_FILE
 
 # Get the public IP for AKS outbound traffic
 AKS_PIP_ID=$(az network public-ip show -g $RG_AKS --name $AKS_PIP_NAME --query id -o tsv)
-
+echo $AKS_PIP_ID
 AKS_SUBNET_ID=$(az network vnet subnet show -g $RG_SHARED --vnet-name $PROJ_VNET_NAME --name $AKS_SUBNET_NAME --query id -o tsv)
-
+echo $AKS_SUBNET_ID
 # If you enabled the preview features above, you can create a cluster with these features (check the preview script)
 # I separated some flags like --aad as it requires that you completed the preparation steps earlier
 # Also note that some of these flags are not needed as I'm setting their default value, I kept them here
@@ -36,7 +36,35 @@ AKS_SUBNET_ID=$(az network vnet subnet show -g $RG_SHARED --vnet-name $PROJ_VNET
 # az aks list -o table
 
 # Note: address ranges for the subnet and cluster internal services are defined in variables script
+echo 'Now Creating Kubernetes Cluster'
 
+echo az aks create \
+    --resource-group $RG_AKS \
+    --name $AKS_CLUSTER_NAME \
+    --location $LOCATION \
+    --kubernetes-version $AKS_VERSION \
+    --generate-ssh-keys \
+    --enable-addons monitoring \
+    --load-balancer-outbound-ips $AKS_PIP_ID \
+    --vnet-subnet-id $AKS_SUBNET_ID \
+    --network-plugin kubenet \
+    --network-policy calico \
+    --service-cidr $AKS_SERVICE_CIDR \
+    --dns-service-ip $AKS_DNS_SERVICE_IP \
+    --docker-bridge-address $AKS_DOCKER_BRIDGE_ADDRESS \
+    --nodepool-name $AKS_DEFAULT_NODEPOOL \
+    --node-count 5 \
+    --max-pods 100 \
+    --node-vm-size "Standard_D4s_v3" \
+    --vm-set-type VirtualMachineScaleSets \
+    --service-principal $AKS_SP_ID \
+    --client-secret $AKS_SP_PASSWORD \
+    --workspace-resource-id $SHARED_WORKSPACE_ID \
+    --attach-acr $CONTAINER_REGISTRY_NAME \
+    --aad-server-app-id $SERVER_APP_ID \
+    --aad-server-app-secret $SERVER_APP_SECRET \
+    --aad-client-app-id $CLIENT_APP_ID \
+    --aad-tenant-id $TENANT_ID
 # NOTE: Before executing the following commands, please consider reviewing the extended features below to append them if applicable
 az aks create \
     --resource-group $RG_AKS \
@@ -61,7 +89,10 @@ az aks create \
     --client-secret $AKS_SP_PASSWORD \
     --workspace-resource-id $SHARED_WORKSPACE_ID \
     --attach-acr $CONTAINER_REGISTRY_NAME \
-    --tags $TAG_ENV_DEV $TAG_PROJ_CODE $TAG_DEPT_IT $TAG_STATUS_EXP
+    --aad-server-app-id $SERVER_APP_ID \
+    --aad-server-app-secret $SERVER_APP_SECRET \
+    --aad-client-app-id $CLIENT_APP_ID \
+    --aad-tenant-id "231da557-0409-43b4-942e-518831bee879"
 
     # If you enabled aks-preview Azure CLI extension with version 0.3.2 or later, you can specify the custom name for the nodes resource group
     # By default, nodes resource group will be named [MC_resourcegroupname_clustername_location], to override it, add the following:

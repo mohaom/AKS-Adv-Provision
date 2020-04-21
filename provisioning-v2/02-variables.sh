@@ -21,10 +21,10 @@
 # Have a project code (short like 2 or 3 letters)
 # I selected "cap" for crowd-analytics-platform project I worked on
 
-PROJECT_CODE="cap"
+PROJECT_CODE="tat"
 # Set the environment that this deployment represent (dev, qa, prod,...)
-ENVIRONMENT="dev"
-SUBSCRIPTION_CODE="gbb"
+ENVIRONMENT="prod"
+SUBSCRIPTION_CODE="tu"
 
 # Variable file will be used to store the values based on your deployment
 VAR_FILE=$PROJECT_CODE-$ENVIRONMENT-$SUBSCRIPTION_CODE.vars
@@ -39,7 +39,7 @@ PREFIX="${ENVIRONMENT}${PROJECT_CODE}"
 echo export PREFIX=$PREFIX >> ./$VAR_FILE
 
 # Primary location
-LOCATION="East US"
+LOCATION="eastus"
 # Location code will be used to setup multi-region resources
 LOCATION_CODE="US"
 echo export LOCATION=$LOCATION >> ./$VAR_FILE
@@ -216,7 +216,7 @@ echo export AKS_DEFAULT_NODEPOOL=$AKS_DEFAULT_NODEPOOL >> ./$VAR_FILE
 # Make sure that all of these ranges are not overlapping to any connected network space (on Azure and otherwise)
 # These addresses are lated to AKS services mainly and should not overlap with other networks as they might present a conflict
 echo export AKS_SERVICE_CIDR="10.19.2.0/24" >> ./$VAR_FILE
-echo export AKS_DNS_SERVICE_IP="10.19.4.4" >> ./$VAR_FILE
+echo export AKS_DNS_SERVICE_IP="10.19.2.40" >> ./$VAR_FILE
 echo export AKS_DOCKER_BRIDGE_ADDRESS="172.17.0.1/16" >> ./$VAR_FILE
 # Range to be used when using kubenet (not Azure CNI)
 echo export AKS_POD_CIDR="10.244.0.0/16" >> ./$VAR_FILE

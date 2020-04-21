@@ -72,7 +72,7 @@ az network vnet subnet create \
 az network vnet subnet create \
     --resource-group $RG_SHARED \
     --vnet-name $PROJ_VNET_NAME \
-    --name $FW_SUBNET_IP_PREFIX \
+    --name $FW_SUBNET_NAME \
     --address-prefix $FW_SUBNET_IP_PREFIX
 
 
