@@ -24,26 +24,6 @@ SHARED_WORKSPACE_ID=$(echo $SHARED_WORKSPACE | jq -r '.properties["outputResourc
 
 echo export SHARED_WORKSPACE_ID=$SHARED_WORKSPACE_ID >> ./$VAR_FILE
 
-# Hub Analytics Workspace
-# Update the deployment template with selected location
-# sed deployments/logs-workspace-deployment.json \
-#     -e s/WORKSPACE-NAME/$HUB_EXT_WORKSPACE_NAME/g \
-#     -e s/DEPLOYMENT-LOCATION/$LOCATION/g \
-#     -e s/ENVIRONMENT-VALUE/DEV/g \
-#     -e s/PROJECT-VALUE/Shared-Service/g \
-#     -e s/DEPARTMENT-VALUE/IT/g \
-#     -e s/STATUS-VALUE/Experimental/g \
-#     > hub-logs-workspace-deployment-updated.json
-
-# # Deployment can take a few mins
-# HUB_WORKSPACE=$(az group deployment create \
-#     --resource-group $RG_INFOSEC \
-#     --name $PREFIX-hub-logs-workspace-deployment \
-#     --template-file hub-logs-workspace-deployment-updated.json)
-
-# HUB_WORKSPACE_ID=$(echo $HUB_WORKSPACE | jq -r '.properties["outputResources"][].id')
-# echo export HUB_WORKSPACE_ID=$HUB_WORKSPACE_ID >> ./$VAR_FILE
-
 # In addition to Azure Monitor for containers, you can deploy app insights to your application code
 # App Insights support many platforms like .NET, Java, and NodeJS.
 # Docs: https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview

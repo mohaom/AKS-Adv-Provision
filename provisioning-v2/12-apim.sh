@@ -11,11 +11,8 @@
 # Make sure that variables are updated
 source ./$VAR_FILE
 
-# Subnet for Dev APIM
+# Subnet for Prod APIM
 APIM_SUBNET_ID=$(az network vnet subnet show -g $RG_SHARED --vnet-name $PROJ_VNET_NAME --name $APIM_SUBNET_NAME --query id -o tsv)
-
-# Subnet for Prod (if you want to deploy a prod)
-# APIM_SUBNET_ID=$(az network vnet subnet show -g $RG_INFOSEC --vnet-name $HUB_EXT_VNET_NAME --name $APIM_SUBNET_NAME --query id -o tsv)
 
 sed deployments/apim-deployment.json \
     -e s/APIM-NAME/$APIM_NAME/g \

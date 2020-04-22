@@ -129,22 +129,11 @@ kubectl create namespace dev
 kubectl apply -f ./deployments/role-dev-namespace.yaml
 
 # We need the group resource ID for appdev group to be replaced in the role binding deployment file
-az ad group show --group developers --query objectId -o tsv
+DevGroupID = az ad group show --group developers --query objectId -o tsv
 
 # Replace the group id in rolebinding-dev-namespace.yaml before applying the deployment # Note the error!
-sed -i rolebinding-dev-namespace.yaml -e "s/groupObjectId/$APPDEV_ID/g"
+sed -i rolebinding-dev-namespace.yaml -e "s/groupObjectId/$DevGroupID/g"
 kubectl apply -f ./deployments/rolebinding-dev-namespace.yaml
-
-# Doing the same to create access for the SRE
-kubectl create namespace sre
-
-kubectl apply -f ./deployments/role-sre-namespace.yaml
-
-az ad group show --group opssre --query objectId -o tsv
-
-# Update the opssre group id to rolebinding-sre-namespace.yaml before applying the deployment
-sed -i rolebinding-sre-namespace.yaml -e "s/groupObjectId/$OPSSRE_ID/g"
-kubectl apply -f ./deployments/rolebinding-sre-namespace.yaml
 
 # Testing now can be done by switching outside of the context of the admin to one of the users created
 

@@ -67,9 +67,6 @@ echo export APP_NAME="${PREFIX}-insights-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" 
 
 ### Virtual networks
 echo export PROJ_VNET_NAME="${PREFIX}-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
-# echo export HUB_EXT_VNET_NAME="hub-ext-vnet-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
-# HUB_INT_VNET_NAME can be added to introduce on-premise connectivity
-
 
 # AKS primary subnet
 echo export AKS_SUBNET_NAME="${PREFIX}-aks" >> ./$VAR_FILE
@@ -79,9 +76,6 @@ echo export SVC_SUBNET_NAME="${PREFIX}-ingress" >> ./$VAR_FILE
 
 # Virutal nodes subnet (for serverless burst scaling)
 echo export VN_SUBNET_NAME="${PREFIX}-vn" >> ./$VAR_FILE
-
-# Development API Management subnet
-# echo export APIM_HOSTED_SUBNET_NAME="${PREFIX}-apim-dev" >> ./$VAR_FILE
 
 # Project devops/jump-box subnet
 echo export PROJ_DEVOPS_AGENTS_SUBNET_NAME="${PREFIX}-devops" >> ./$VAR_FILE
@@ -110,21 +104,12 @@ echo export FW_SUBNET_NAME="AzureFirewallSubnet" >> ./$VAR_FILE
 
 # 2046 allocated addresses (from 8.0 to 15.255)
 echo export PROJ_VNET_ADDRESS_SPACE_1="10.19.0.0/16" >> ./$VAR_FILE
-# 2046 allocated addresses (from 16.0 to 23.255)
-#echo export PROJ_VNET_ADDRESS_SPACE_2="10.165.16.0/21" >> ./$VAR_FILE
-# Incase you need the next address space, you can use this
-# echo export PROJ_VNET_ADDRESS_SPACE_3="10.165.24.0/22" >> ./$VAR_FILE
 
 # This /21 size would support around 60 node cluster (given that 30 pods/cluster is used)
 echo export AKS_SUBNET_IP_PREFIX="10.19.0.0/27" >> ./$VAR_FILE
 echo export VN_SUBNET_IP_PREFIX="10.19.1.0/24" >> ./$VAR_FILE
-#echo export SVC_SUBNET_IP_PREFIX="10.19.2.0/24" >> ./$VAR_FILE
-#echo export APIM_HOSTED_SUBNET_IP_PREFIX="10.165.21.0/24" >> ./$VAR_FILE
 echo export PROJ_DEVOPS_AGENTS_SUBNET_IP_PREFIX="10.19.0.32/27" >> ./$VAR_FILE
 echo export PRIVATE_ENDPOINTS_SUBNET_NAME="10.19.3.0/24" >> ./$VAR_FILE
-
-# 2048 allocated addresses (from 0.0 to 7.255)
-#echo export HUB_EXT_VNET_ADDRESS_SPACE="10.165.0.0/21" >> ./$VAR_FILE
 
 echo export FW_SUBNET_IP_PREFIX="10.19.10.0/26" >> ./$VAR_FILE
 echo export AGW_SUBNET_IP_PREFIX="10.19.10.64/26" >> ./$VAR_FILE
@@ -134,7 +119,7 @@ echo export DEVOPS_AGENTS_SUBNET_IP_PREFIX="10.19.0.96/27" >> ./$VAR_FILE
 ### Key Vault
 echo export KEY_VAULT_PRIMARY="${PREFIX}-shared-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
 
-### API Management (Dev instance)
+### API Management (Prod instance)
 echo export APIM_NAME=$PREFIX-apim-$SUBSCRIPTION_CODE-$LOCATION_CODE  >> ./$VAR_FILE
 echo export APIM_ORGANIZATION_NAME="Tat" >> ./$VAR_FILE
 echo export APIM_ADMIN_EMAIL="momarse@hotmail.com" >> ./$VAR_FILE
@@ -144,12 +129,6 @@ echo export APIM_SKU="Premium" >> ./$VAR_FILE #Replace with "Premium" if you are
 
 # AKS Service Principal
 echo export AKS_SP_NAME="${PREFIX}-aks-sp-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
-# The following will be loaded by AAD module
-# AKS_SP_ID="REPLACE"
-# AKS_SP_PASSWORD="REPLACE"
-# echo export AKS_SP_NAME=$AKS_SP_NAME >> ./$VAR_FILE
-# echo export AKS_SP_ID=$AKS_SP_ID >> ./$VAR_FILE
-# echo export AKS_SP_PASSWORD=$AKS_SP_PASSWORD >> ./$VAR_FILE
 
 # AAD Enabled Cluster
 SERVER_APP_ID=REPLACE
@@ -175,8 +154,6 @@ AGIC_MANAGED_IDENTITY_NAME="${PREFIX}-agic-identity-${SUBSCRIPTION_CODE}-${LOCAT
 echo export AGIC_MANAGED_IDENTITY_NAME=$AGIC_MANAGED_IDENTITY_NAME >> ./$VAR_FILE
 # or use Service Principal
 AGIC_SP_NAME="${PREFIX}-agic-sp-${SUBSCRIPTION_CODE}-${LOCATION_CODE}"
-# AGIC_SP_ID=REPLACE
-# AGIC_SP_Password=REPLACE
 echo export AGIC_SP_NAME=$AGIC_SP_NAME >> ./$VAR_FILE
 echo export AGIC_SP_ID=$AGIC_SP_ID >> ./$VAR_FILE
 echo export AGIC_SP_Password=$AGIC_SP_Password >> ./$VAR_FILE
@@ -187,7 +164,6 @@ echo export CONTAINER_REGISTRY_NAME="acr${PREFIX}${SUBSCRIPTION_CODE}${LOCATION_
 ### Application Gateway (AGW)
 echo export AGW_NAME="${PREFIX}-agw-${SUBSCRIPTION_CODE}-${LOCATION_CODE}" >> ./$VAR_FILE
 echo export AGW_PRIVATE_IP="10.19.10.69" >> ./$VAR_FILE
-# echo export AGW_RESOURCE_ID=REPLACE >> ./$VAR_FILE
 
 ### Azure Firewall
 FW_NAME="hub-ext-fw-${SUBSCRIPTION_CODE}-${LOCATION_CODE}"
@@ -201,9 +177,6 @@ echo export FW_UDR_ROUTE_NAME=$FW_UDR_ROUTE_NAME >> ./$VAR_FILE
 
 ### AKS Cluster
 AKS_CLUSTER_NAME="${PREFIX}-aks-${SUBSCRIPTION_CODE}-${LOCATION_CODE}"
-
-# AKS version will be set at the cluster provisioning time
-# AKS_VERSION=REPLACE
 
 # Default node pool name must all small letters and not exceed 15 letters
 AKS_DEFAULT_NODEPOOL="primary"
@@ -220,8 +193,6 @@ echo export AKS_DNS_SERVICE_IP="10.19.2.40" >> ./$VAR_FILE
 echo export AKS_DOCKER_BRIDGE_ADDRESS="172.17.0.1/16" >> ./$VAR_FILE
 # Range to be used when using kubenet (not Azure CNI)
 echo export AKS_POD_CIDR="10.244.0.0/16" >> ./$VAR_FILE
-
-
 
 ### Public IPs
 echo export AKS_PIP_NAME="${AKS_CLUSTER_NAME}-pip" >> ./$VAR_FILE
