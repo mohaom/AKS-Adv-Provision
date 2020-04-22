@@ -10,5 +10,5 @@ roleRef:
 subjects:
 - kind: Group
   namespace: dev
-  name: be86fa20-bb1f-487e-9b81-e0cb432373d9
+  name: groupObjectId
   
